@@ -186,7 +186,8 @@ def write_files(geneList, geneDict, d, samples):
             except KeyError:
                 print('KeyError: ' + gene)
                 outfile.write(gene + '\t\t\t')
-            for sample in samples:
+            allSamps = ["global"] + samples
+            for sample in allSamps:
                 outfile.write("%s\t%s\t%s\t%s\t" %
                 ("\t".join(d[sample]["theta"][gene]),
                 d[sample]["pi"][gene],
