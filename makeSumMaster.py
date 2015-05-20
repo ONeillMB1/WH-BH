@@ -169,9 +169,9 @@ def pop_di(d, samples):
 def write_files(geneList, geneDict, d, samples):
     with open(outfileName, 'w') as outfile:
         outfile.write(
-        'gene.symbol\tgene.name\tgene.length\tgene.des\tg.snps\tg.coverage\tg.theta\tg.pi\tg.TD\tg.NSlen\tg.Slen\tg.NSsnps\tg.Ssnps\tg.piN\tg.piS\tg.piN.piS\t')
+        'gene.symbol\tgene.name\tgene.length\tgene.des\tg.snps\tg.coverage\tg.theta\tg.pi\tg.TD\tg.NSlen\tg.Slen\tg.NSsnps\tg.Ssnps\tg.piN\tg.piS\tg.piN.piS')
         for sample in samples:
-            outfile.write("%s\t%s\t%s\t%s\t%s\t%s\t%s\t" %
+            outfile.write("\t%s\t%s\t%s\t%s\t%s\t%s\t%s" %
             (sample+'.cov',
             sample+'.theta',
             sample+'.pi',
@@ -179,8 +179,7 @@ def write_files(geneList, geneDict, d, samples):
             sample+'.piN',
             sample+'.piS',
             sample+'.piNpiS'))
-        
-        #a1.coverage\ta1.theta\ta1.pi\ta1.TD\ta1.piN\ta1.piS\ta1.piN.piS\ta2.coverage\ta2.theta\ta2.pi\ta2.TD\ta2.piN\ta2.piS\ta2.piN.piS\ta3.coverage\ta3.theta\ta3.pi\ta3.TD\ta3.piN\ta3.piS\ta3.piN.piS\tb2.coverage\tb2.theta\tb2.pi\tb2.tajD\tb2.piN\tb2.piS\tb2.piN.piS\tc1.coverage\tc1.theta\tc1.pi\tc1.tajD\tc1.piN\tc1.piS\tc1.piN.piS\tc2.coverage\tc2.theta\tc2.pi\tc2.tajD\tc2.piN\tc2.piS\tc2.piN.piS\n')
+        outfile.write('\n')
         for gene in geneList:
             try:
                 outfile.write(gene + '\t' + "\t".join(geneDict[gene]) + '\t')
