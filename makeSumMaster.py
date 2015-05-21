@@ -61,7 +61,7 @@ def pop_dg(d):
                 cov = float(line[2])
             except ValueError:
                 cov = line[2]
-            if type(cov) == float and cov >= 0.5:
+            if type(cov) == float and cov >= 0.55:
                 d["global"]["TD"][gene] = line[3]
     with open("global/global.genes.pi", 'r') as file:
         for line in file:
@@ -71,7 +71,7 @@ def pop_dg(d):
                 cov = float(line[2])
             except ValueError:
                 cov = line[2]
-            if type(cov) == float and cov >= 0.5:
+            if type(cov) == float and cov >= 0.55:
                 d["global"]["pi"][gene] = line[3]
     passGenes = []
     with open("global/global.genes.theta", 'r') as file:
@@ -82,10 +82,10 @@ def pop_dg(d):
                 cov = float(line[2])
             except ValueError:
                 cov = line[2]
-            if type(cov) == float and cov >= 0.5:
+            if type(cov) == float and cov >= 0.55:
                 d["global"]["theta"][gene] = line[1:]
                 passGenes.append(gene)
-    print("global sample has " + str(len(passGenes)) + " genes with >= 0.5 coverage")
+    print("global sample has " + str(len(passGenes)) + " genes with >= 0.55 coverage")
     with open("global/global_syn-nonsyn.pi", 'r') as infile:
         for line in infile:
             line = line.strip().split('\t')
@@ -114,7 +114,7 @@ def pop_di(d, samples):
                     cov = float(line[1])
                 except ValueError:
                     cov = line[1]
-                if type(cov) == float and cov >= 0.5:
+                if type(cov) == float and cov >= 0.55:
                     d[sample]["TD"][gene] = line[12]
         with open('pi/' + sample + '_' + parameters + '_pi.genes.mean', 'r') as infile:
             next(infile)
@@ -125,7 +125,7 @@ def pop_di(d, samples):
                     cov = float(line[1])
                 except ValueError:
                     cov = line[1]
-                if type(cov) == float and cov >= 0.5:
+                if type(cov) == float and cov >= 0.55:
                     d[sample]["pi"][gene] = line[12]
         passGenes = []
         with open("theta/" + sample + '_' + parameters + '_theta.genes.mean', 'r') as infile3:
@@ -136,10 +136,10 @@ def pop_di(d, samples):
                     cov = float(line[1])
                 except ValueError:
                     cov = line[1]
-                if type(cov) == float and cov >= 0.5:
+                if type(cov) == float and cov >= 0.55:
                     d[sample]["theta"][gene] = [line[1],line[12]]
                     passGenes.append(gene)
-        print(sample + " has " + str(len(passGenes)) + " genes with >= 0.5 coverage")
+        print(sample + " has " + str(len(passGenes)) + " genes with >= 0.55 coverage")
         #with open('piNpiS/' + sample + '_med.calc', 'r') as infile4:
         #    next(infile4)
         #    for line in infile4:
