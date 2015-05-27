@@ -30,15 +30,15 @@ def make_dataDicts(prefixes):
         for prefix in prefixes:
             d[stat][prefix] = {}
     print("There are " + str(len(d)) + " stats in dictionary")
-    if len(d["pi"]) == len(d["theta"]): #and len(d["pi"]) == len(d["TD"]):
+    if len(d["pi"]) == len(d["theta"] and len(d["pi"]) == len(d["TD"]):
         print("There are " + str(len(d["pi"])) + " samples for each stat.")
     return d, stats
 
 def make_pi(prefixes, d):
     for prefix in prefixes:
         for i in range(1,10):
-            piFileName = prefix + '_mq20_rand{i}_filtered_c50_w100K_s10K_n10K.pi'.format(i=i)
-            #print piFileName
+            piFileName = 'pi/' + prefix + '_mq20_rand{i}_filtered_c50_w100K_s10K_n10K.pi'.format(i=i)
+            print piFileName
             with open(piFileName, 'r') as piFile:
                 for line in piFile:
                     line = line.strip()
@@ -51,7 +51,7 @@ def make_pi(prefixes, d):
 def make_theta(prefixes, d):
     for prefix in prefixes:
         for i in range(1,10):
-            thetaFileName = prefix + '_mq20_rand{i}_filtered_c50_w100K_s10K_n10K.theta'.format(i=i)
+            thetaFileName = 'theta/' + prefix + '_mq20_rand{i}_filtered_c50_w100K_s10K_n10K.theta'.format(i=i)
             with open(thetaFileName, 'r') as thetaFile:
                 for line in thetaFile:
                     line = line.strip()
@@ -64,7 +64,7 @@ def make_theta(prefixes, d):
 def make_TD(prefixes, d):
     for prefix in prefixes:
         for i in range(1,10):
-            TDFileName = prefix + '_mq20_rand{i}_filtered_c50_w100K_s10K_n10K.tajD'.format(i=i)
+            TDFileName = 'TD/' + prefix + '_mq20_rand{i}_filtered_c50_w100K_s10K_n10K.tajD'.format(i=i)
             with open(TDFileName, 'r') as TDFile:
                 for line in TDFile:
                     line = line.strip()
@@ -76,7 +76,7 @@ def make_TD(prefixes, d):
 
 def write_files(prefixes, sampDict, d, stats):
     for stat in stats:
-        with open(stat + '_mq20.out', 'w') as outfile:
+        with open(stat + '_mq20.out2', 'w') as outfile:
             #outfile.write(
             #'prefix\twindow\tvalue\n'
             #)
