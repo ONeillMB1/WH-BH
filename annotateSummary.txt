@@ -83,7 +83,10 @@ def find_freq(syncFile, d2):
                             af = float(counts[2])/cov
                         elif ref == "G":
                             af = float(counts[3])/cov
-                    freqs.append(af)
+                    af2 = "{0:.2f}".format(af)
+                    if float(af2) == 1.00:
+                        af2 = "1.0"
+                    freqs.append(af2)
                 freqDict[pos] = freqs
                 d2[pos].append(freqs)
     return d2
@@ -98,7 +101,7 @@ def make_snpDict(annFile, d2):
         try:
             d2[snp].append(snpDict[snp])
         except KeyError:
-            d2[snp].append("NA")
+            d2[snp].append(["NA","NA","NA","NA","NA","NA"])
     return d2
 
 def make_catDict(d2):
