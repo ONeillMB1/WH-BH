@@ -1,0 +1,45 @@
+#!/usr/bin/env ipython
+
+import sys
+
+#Check for correct number of inputs
+if len(sys.argv) != 4:
+    print("Usage: TakeSubsetNexus.ipy <subsetlistfile> <alignmentfile> <outfile>")
+    sys.exit(0)
+
+progName, subsetfile, alignmentfile, outfilename = sys.argv
+
+def make_list():
+    #make a list of the XRS samples you wish to extract
+    subsetList = []
+    with open(subsetfile, 'r') as subset:
+        for line in subset:
+            if line[0] != "#":
+                line = line.strip()
+                subsetList.append(line)
+    return(subsetList)
+
+def extract_list(subsetList):
+    #extract the XRS sequences into new alignment
+    with open(alignmentfile, 'r') as alignment:
+        indicies = []
+        for i, line in enumerate(alignment):
+            line = line.strip().split()
+            name = line[0]
+            if name in subsetList:
+                indicies.append(i)
+                indicies.append((i+1))
+    with open(alignmentfile, 'r') as alignment, open(outfilename, "w") as outfile:
+        outfile.write("#NEXUS" + '\n')
+        outfile.write("begin data;" + '\n')
+        outfile.write('\t' + "dimensions ntax={0} nchar=3998820;".format(len(subsetList)) + '\n')
+        outfile.write('\t' + "format datatype=dna missing=? gap=-;" + '\n')
+        outfile.write('\t' "Matrix" + '\n')
+        for i, line in enumerate(alignment):
+            line = line.strip()
+            if i in indicies:
+                outfile.write(line + '\n')           
+        outfile.write(";" + '\n' + "END;")
+
+subsetList = make_list()
+extract_list(subsetList)
