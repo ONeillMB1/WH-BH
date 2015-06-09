@@ -72,17 +72,22 @@ def find_freq(syncFile, d2):
                     counts = samp.split(":")
                     counts = [int(x) for x in counts]
                     cov = sum(counts)
+                    maa = counts.index(max(counts))
                     if cov < 10:
                         af = "NA"
                     else:
-                        if ref == "A":
-                            af = float(counts[0])/cov
-                        elif ref == "T":
-                            af = float(counts[1])/cov
-                        elif ref == "C":
-                            af = float(counts[2])/cov
-                        elif ref == "G":
-                            af = float(counts[3])/cov
+                        #if ref == "A":
+                        if maa == 0:
+                            af = 1 - float(counts[0])/cov
+                        #elif ref == "T":
+                        elif maa == 1:
+                            af = 1 - float(counts[1])/cov
+                        #elif ref == "C":
+                        elif maa == 2:
+                            af = 1 - float(counts[2])/cov
+                        #elif ref == "G":
+                        elif maa == 3:
+                            af = 1 - float(counts[3])/cov
                     af2 = "{0:.2f}".format(af)
                     if float(af2) == 1.00:
                         af2 = "1.0"
