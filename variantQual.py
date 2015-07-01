@@ -92,3 +92,49 @@ def extract_baseq(samp):
             pos = int(line[1])
             if pos in snps:
                 outFile.write("\t".join(line) + '\n')
+
+def make_catDict():
+    catDict = {}
+    with open("/home/mrood/scripts/importantFiles/TBGeneSet.txt", 'r') as catFile:
+        for line in catFile:
+            line = line.strip().split('\t')
+            cat = line[0]
+            catDict[cat] = [i.replace("c","") for i in line[2].split()]
+    return catDict
+
+def annotate_snp(samp, geneDict, catDict):
+    inFile = samp + 'baseq.snps'
+    snpDict = {}
+    with open(inFile, 'r') as infile:
+        for line in infile:
+            line = line.strip().split('\t')
+            snp = int(line[1])
+            snpDict[snp] = [line, []]
+            for gene in geneDict:
+                if snp >= geneDict[gene][0] and snp <= geneDict[gene][1]:
+                    snpDict[snp][1].append(gene)
+    outFile = samp + 'baseq.snps.gene'
+    for snp in snpDict:
+        snpDict[snp].append([])
+        if len(snpDict[snp][1]) < 1:
+            snpDict[snp][2].append(["yes", ["no"]*32)])
+        else:
+            for geneX in snpDict[snp][1]:
+                gene = geneX.replace("c", "")
+                catList = ["yes"]
+                for cat in sorted(catDict, key=catDict.get):
+                    if gene in catDict[cat]:
+                        catList.append("yes")
+                    else:
+                        catList.append("no")
+                snpDict[snp][2].append(catList)
+    outFile = samp + 'baseq.snps.ann'
+    with open(outFile, 'w') as outfile:
+        for snp in snpDict:
+            for i, gene in enumerate(snpDict[snp][1]):
+                outfile.write('%s\t%s\t%s\n' %
+                ("\t".join(snpDict[snp][0]),
+                snpDict[snp][1][i],
+                "\t".join(snpDict[snp][2][i]))
+                )
+    return snpDict
