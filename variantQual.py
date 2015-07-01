@@ -52,3 +52,43 @@ def make_snpList(samples):
         with open(outFileName, 'w') as outFile:
             for var in snps:
                 outFile.write(str(var) + '\n')
+
+def extract_pileup(samp):
+    snps = set()
+    snpFileName = samp + '.sub.snps'
+    print snpFileName
+    with open(snpFileName, 'r') as snpFile:
+        for line in snpFile:
+            line = line.strip()
+            snps.add(int(line))
+    print("There are {0} snps for {1}".format(len(snps),snpFileName))
+    pileupFileName = '/home/mrood/WH-BH/rawData/' + samp + '_Q20_filtered.pileup'
+    outFileName = samp + '_sub_snps.pileup'
+    print('Reading {0}'.format(pileupFileName))
+    with open(pileupFileName, 'r') as pileupFile, open(outFileName, 'w') as outFile:
+        for line in pileupFile:
+            line = line.strip().split('\t')
+            pos = int(line[1])
+            if pos in snps:
+                outFile.write("\t".join(line) + '\n')
+
+
+def extract_baseq(samp):
+    snps = set()
+    snpFileName = samp + '.sub.snps'
+    print snpFileName
+    with open(snpFileName, 'r') as snpFile:
+        for line in snpFile:
+            line = line.strip()
+            snps.add(int(line))
+    print("There are {0} snps for {1}".format(len(snps),snpFileName))
+    baseqFileName = samp + '.baseq.ext'
+    outFileName = samp + 'baseq.snps'
+    print('Reading {0}'.format(baseqFileName))
+    with open(baseqFileName, 'r') as baseqFile, open(outFileName, 'w') as outFile:
+        next(baseqFile)
+        for line in baseqFile:
+            line = line.strip().split('\t')
+            pos = int(line[1])
+            if pos in snps:
+                outFile.write("\t".join(line) + '\n')
