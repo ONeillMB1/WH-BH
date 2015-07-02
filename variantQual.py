@@ -151,3 +151,34 @@ COG.H\tCOG.D\tCOG.U\tCOG.N\n') #header
                 "\t".join(snpDict[snp][3][i]))
                 )
     return snpDict
+
+
+def make_d():
+    d = {}
+    with open("/home/mrood/WH-BH/data/mq20_masterEdit.txt", 'r')\
+as infile:
+        header = []
+        for i, line in enumerate(infile):
+            line = line.strip()
+            if i == 0:
+                linefield = line.split('\t')
+                for variable in linefield:
+                    d[variable] = {}
+                    header.append(variable)
+            else:
+                linefield = line.split('\t')
+                for pos, item in enumerate(linefield):
+                    d[header[pos]][linefield[0]] = linefield[pos]
+    return d
+          
+def add_TD(samples, d):
+    for samp in samples:
+        inFile = samp + 'baseq.snps.ann'
+        outFile = inFile + '.td'
+        with open(inFile, 'r') as infile, open(outFile, 'w') as outfile:
+            for i, line in enumerate(infile):
+                line = line.strip().split()
+                if i == 0:
+                    outfile.write("\t".join(line) + '\t' + "TD" + '\n')
+                else:
+                    outfile.write("\t".join(line) + '\t' + str(d[samp+'.tajD'][line[16]]) + '\n')
