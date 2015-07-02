@@ -109,32 +109,45 @@ def annotate_snp(samp, geneDict, catDict):
         for line in infile:
             line = line.strip().split('\t')
             snp = int(line[1])
-            snpDict[snp] = [line, []]
+            maf = float(line[7])/float(line[3])
+            snpDict[snp] = [line, maf, [], []]
             for gene in geneDict:
                 if snp >= geneDict[gene][0] and snp <= geneDict[gene][1]:
-                    snpDict[snp][1].append(gene)
+                    snpDict[snp][2].append(gene)
     outFile = samp + 'baseq.snps.gene'
     for snp in snpDict:
-        snpDict[snp].append([])
-        if len(snpDict[snp][1]) < 1:
-            snpDict[snp][2].append(["yes", ["no"]*32)])
+        if len(snpDict[snp][2]) < 1:
+            snpDict[snp][3].append(["yes"] + ["no"]*32) #yes for 'all'
         else:
-            for geneX in snpDict[snp][1]:
+            for i, geneX in enumerate(snpDict[snp][2]):
                 gene = geneX.replace("c", "")
-                catList = ["yes"]
+                if i == 0:
+                    catList = ["yes"] #yes for 'all'
+                if i > 0:
+                    catList = ["no"] #only count each snp once for 'all'
                 for cat in sorted(catDict, key=catDict.get):
                     if gene in catDict[cat]:
                         catList.append("yes")
                     else:
                         catList.append("no")
-                snpDict[snp][2].append(catList)
+                snpDict[snp][3].append(catList)
     outFile = samp + 'baseq.snps.ann'
     with open(outFile, 'w') as outfile:
+        outfile.write('chrom\tpos\tref\treads_all\treads_pp\t\
+matches\tmatches_pp\tmismatches\tmismatches_pp\t\
+rms_baseq\trms_baseq_pp\trms_baseq_matches\trms_baseq_matches_pp\t\
+rms_baseq_mismatches\trms_baseq_mismatches_pp\talt_allele_freq\t\
+gene\tall\tTL.info\tTraSH.invitro\tTraSH.noness\tTL.CHP\t\
+TL.cell\tTL.inter\tTL.reg\tTL.vir\tTL.LIP\tTraSH.invivo\t\
+COG.Q\tTIM\tCOG.S\tCOG.O\tCOG.K\tCOG.F\tCOG.L\tCOG.V\tCOG.I\t\
+COG.R\tCOG.J\tCOG.G\tCOG.P\tCOG.C\tCOG.M\tCOG.T\tCOG.E\tCOG.A\t\
+COG.H\tCOG.D\tCOG.U\tCOG.N\n') #header
         for snp in snpDict:
-            for i, gene in enumerate(snpDict[snp][1]):
-                outfile.write('%s\t%s\t%s\n' %
+            for i, gene in enumerate(snpDict[snp][2]):
+                outfile.write('%s\t%f\t%s\t%s\n' %
                 ("\t".join(snpDict[snp][0]),
-                snpDict[snp][1][i],
-                "\t".join(snpDict[snp][2][i]))
+                snpDict[snp][1],
+                snpDict[snp][2][i],
+                "\t".join(snpDict[snp][3][i]))
                 )
     return snpDict
